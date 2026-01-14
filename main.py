@@ -1,13 +1,28 @@
-import requests, uuid, hashlib, time
+import requests, uuid, hashlib, time, os
 from colorama import Fore, Style, init
 
 init(autoreset=True)
 
 SERVER_URL = "http://13.203.201.49:8000"
-TOOL_VERSION = "1.0"
+TOOL_VERSION = "1.1"
 
-def device_id():
-    return hashlib.sha256(str(uuid.getnode()).encode()).hexdigest()
+DEVICE_FILE = os.path.expanduser("~/.bfs_device_id")
+
+def get_device_id():
+    # agar pehle se device id hai
+    if os.path.exists(DEVICE_FILE):
+        with open(DEVICE_FILE, "r") as f:
+            return f.read().strip()
+
+    # first time generate
+    raw = str(uuid.uuid4())
+    device_id = hashlib.sha256(raw.encode()).hexdigest()
+
+    # future ke liye save
+    with open(DEVICE_FILE, "w") as f:
+        f.write(device_id)
+
+    return device_id
 
 def banner():
     art = r"""
