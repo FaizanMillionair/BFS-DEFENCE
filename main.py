@@ -69,10 +69,10 @@ def pretty(resp):
 
 def main():
     banner()
-    print(Fore.WHITE + f"Version: {TOOL_VERSION}\n")
+    print(Fore.WHITE + f"Version: 1.1\n")
 
     lic = input("Enter Licence Key: ").strip()
-    did = device_id()
+    did = get_device_id()
 
     try:
         v = requests.post(
