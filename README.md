@@ -7,11 +7,16 @@ All APIs and logic are handled server-side for security.
 
 ## ✨ Features
 
-- Licence + device binding
-- Server-side API protection
-- No API keys in client
-- Simple update system
-- Works on Linux & Windows
+Phone Number → Complete public information
+
+Aadhaar → All numbers linked to the same name 
+
+Vehicle Number → Full vehicle details (Coming Soon)
+
+Instagram Username → Linked details & number (Coming Soon)
+
+
+More advanced features coming soon.
 
 ---
 
