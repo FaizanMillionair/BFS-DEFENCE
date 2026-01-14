@@ -30,5 +30,5 @@ More advanced features coming soon.
 git clone https://github.com/FaizanMillionair/BFS-DEFENCE
 cd BFS-DEFENCE
 chmod +x install.sh update.sh
-sudo ./install.sh
+bash install.sh
 bfs
