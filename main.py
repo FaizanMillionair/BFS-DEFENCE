@@ -1,0 +1,103 @@
+import requests, uuid, hashlib, time
+from colorama import Fore, Style, init
+
+init(autoreset=True)
+
+SERVER_URL = "http://13.203.201.49:8000"
+TOOL_VERSION = "1.0"
+
+def device_id():
+    return hashlib.sha256(str(uuid.getnode()).encode()).hexdigest()
+
+def banner():
+    art = r"""
+   ██████╗ ███████╗███████╗     ██████╗ ███████╗███████╗███████╗███╗   ██╗ ██████╗███████╗
+  ██╔══██╗██╔════╝██╔════╝    ██╔═══██╗██╔════╝██╔════╝██╔════╝████╗  ██║██╔════╝██╔════╝
+  ██████╔╝█████╗  ███████╗    ██║   ██║█████╗  █████╗  █████╗  ██╔██╗ ██║██║     █████╗  
+  ██╔══██╗██╔══╝  ╚════██║    ██║   ██║██╔══╝  ██╔══╝  ██╔══╝  ██║╚██╗██║██║     ██╔══╝  
+  ██████╔╝██║     ███████║    ╚██████╔╝██║     ███████╗███████╗██║ ╚████║╚██████╗███████╗
+  ╚═════╝ ╚═╝     ╚══════╝     ╚═════╝ ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+
+                🛡️  BFS DEFENCE  🛡️
+             💀  N A L A N D A  •  O S I N T  💀
+    """
+    for i, line in enumerate(art.split("\n")):
+        print((Fore.CYAN if i % 2 == 0 else Fore.RED) + Style.BRIGHT + line)
+        time.sleep(0.03)
+
+    for _ in range(2):
+        print(Fore.RED + Style.BRIGHT + "\n   [ DEFENCE MODE : ACTIVE ]", end="\r")
+        time.sleep(0.4)
+        print(Fore.CYAN + Style.BRIGHT + "   [ DEFENCE MODE : ACTIVE ]", end="\r")
+        time.sleep(0.4)
+    print("\n")
+
+def pretty(resp):
+    if not resp.get("success"):
+        print(Fore.RED + "[-] Request failed / no data")
+        return
+
+    print(Fore.MAGENTA + Style.BRIGHT + "\n════════════════════════════════════════════")
+    print(Fore.CYAN + Style.BRIGHT + "      PERSONAL DETAILS FIND")
+    print(Fore.MAGENTA + Style.BRIGHT + "════════════════════════════════════════════\n")
+
+    for i, rec in enumerate(resp.get("result", []), 1):
+        print(Fore.YELLOW + Style.BRIGHT + f"[ RECORD {i} ]")
+        print(Fore.CYAN + "-"*45)
+        for k, v in rec.items():
+            if v:
+                print(Fore.GREEN + f"{k:<15}" + Fore.WHITE + " : " + Fore.CYAN + str(v))
+        print(Fore.CYAN + "-"*45 + "\n")
+
+    print(Fore.MAGENTA + Style.BRIGHT + "DETAILS FIND BY BFS DEFENCE OSINT")
+    print(Fore.GREEN + Style.BRIGHT + "THANKS FOR PURCHASED\n")
+
+def main():
+    banner()
+    print(Fore.WHITE + f"Version: {TOOL_VERSION}\n")
+
+    lic = input("Enter Licence Key: ").strip()
+    did = device_id()
+
+    try:
+        v = requests.post(
+            f"{SERVER_URL}/verify",
+            json={"licence": lic, "device_id": did},
+            timeout=15
+        ).json()
+    except:
+        print(Fore.RED + "[-] Server not reachable")
+        return
+
+    if not v.get("status"):
+        print(Fore.RED + "[-] Licence invalid / device mismatch")
+        return
+
+    print("\n[1] Phone Lookup\n[2] Aadhaar Lookup")
+    ch = input("Choose option: ").strip()
+    term = input("Enter value: ").strip()
+    typ = "PHONE" if ch == "1" else "AADHAAR"
+
+    try:
+        r = requests.post(
+            f"{SERVER_URL}/lookup",
+            json={
+                "licence": lic,
+                "device_id": did,
+                "type": typ,
+                "term": term,
+                "version": TOOL_VERSION
+            },
+            timeout=30
+        ).json()
+    except:
+        print(Fore.RED + "[-] Server error")
+        return
+
+    pretty(r)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\nBye 👋")
