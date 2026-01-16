@@ -27,6 +27,8 @@ More advanced features coming soon.
 ## 🐧 LINUX / KALI / UBUNTU
 
 ```bash
+pkg install git -y
+pkg install python -y
 git clone https://github.com/FaizanMillionair/BFS-DEFENCE
 cd BFS-DEFENCE
 chmod +x install.sh update.sh
