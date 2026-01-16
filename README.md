@@ -11,7 +11,7 @@ Phone Number → Complete public information
 
 Aadhaar → All numbers linked to the same name 
 
-Vehicle Number → Full vehicle details (Coming Soon)
+Vehicle Number → Full vehicle details 
 
 Instagram Username → Linked details & number (Coming Soon)
 
