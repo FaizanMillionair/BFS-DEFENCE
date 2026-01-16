@@ -8,7 +8,7 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 
 SERVER_URL = "http://13.203.201.49:8000"
-TOOL_VERSION = "1.0"
+TOOL_VERSION = "1.2"
 
 DEVICE_FILE = os.path.expanduser("~/.bfs_device_id")
 
