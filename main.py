@@ -51,16 +51,41 @@ def pretty(resp):
         print(Fore.RED + "[-] Request failed / no data")
         return
 
+    records = resp.get("result", [])
+
+    # detect vehicle (optional, sirf heading ke liye)
+    is_vehicle = False
+    if records and isinstance(records, list):
+        for k in records[0].keys():
+            if "vehicle" in k.lower() or "rc" in k.lower():
+                is_vehicle = True
+                break
+
     print(Fore.MAGENTA + Style.BRIGHT + "\n════════════════════════════════════════════")
-    print(Fore.CYAN + Style.BRIGHT + "      PERSONAL DETAILS FIND")
+    if is_vehicle:
+        print(Fore.CYAN + Style.BRIGHT + "        VEHICLE INFO FIND")
+    else:
+        print(Fore.CYAN + Style.BRIGHT + "      PERSONAL DETAILS FIND")
     print(Fore.MAGENTA + Style.BRIGHT + "════════════════════════════════════════════\n")
 
-    for i, rec in enumerate(resp.get("result", []), 1):
+    for i, rec in enumerate(records, 1):
         print(Fore.YELLOW + Style.BRIGHT + f"[ RECORD {i} ]")
         print(Fore.CYAN + "-" * 45)
+
         for k, v in rec.items():
+
+            # 🔒 FINAL FIX: COPYRIGHT HIDE EVERYWHERE
+            if k.lower() == "copyright":
+                continue
+
             if v:
-                print(Fore.GREEN + f"{k:<15}" + Fore.WHITE + " : " + Fore.CYAN + str(v))
+                label = k.replace("_", " ").upper()
+                print(
+                    Fore.GREEN + f"{label:<18}" +
+                    Fore.WHITE + " : " +
+                    Fore.CYAN + str(v)
+                )
+
         print(Fore.CYAN + "-" * 45 + "\n")
 
     print(Fore.MAGENTA + Style.BRIGHT + "DETAILS FIND BY BFS DEFENCE OSINT")
@@ -94,6 +119,7 @@ def main():
     while True:
         print("\n[1] Phone Lookup")
         print("[2] Aadhaar Lookup")
+        print("[3] Vehicle Lookup (RC)")
         print("[0] Exit")
 
         ch = input("Choose option: ").strip()
@@ -102,12 +128,18 @@ def main():
             print(Fore.YELLOW + "\nBye 👋")
             break
 
-        if ch not in ("1", "2"):
+        if ch not in ("1", "2", "3"):
             print(Fore.RED + "Invalid option")
             continue
 
         term = input("Enter value: ").strip()
-        typ = "PHONE" if ch == "1" else "AADHAAR"
+
+        if ch == "1":
+            typ = "PHONE"
+        elif ch == "2":
+            typ = "AADHAAR"
+        else:
+            typ = "VEHICLE"
 
         try:
             r = requests.post(
@@ -133,3 +165,4 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print(Fore.YELLOW + "\n\n[!] Tool closed by user 👋")
+
